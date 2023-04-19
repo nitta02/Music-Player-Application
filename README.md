@@ -1,18 +1,32 @@
-# flutter_application_1
+Start Using ReadME . Do not know fully how to use this File. 
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# First Day Practice 
+-Use Material App
+-Change App Icon of the APP
+--Added Assests Folder == audios,svgs,imags,videos
 
 
+--Scaffold Widget
+<!-- 1.Background Color Change
+     2. -->
+
+
+--Center Widget
+
+
+
+
+--Appbar Widget
+<!-- 1.Center title 
+     2.Appbar color-->
+
+
+
+
+--Text Widget
+
+--Image Widget 
+<!-- Added Images in Images Folder -->
+
+
+# Day-2nd Practice
