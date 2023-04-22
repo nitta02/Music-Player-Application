@@ -12,7 +12,18 @@ Start Using ReadME . Do not know fully how to use this File.
 
 
 # Day-2nd Practice
-
 --Create Login Page
 --Create Lottery Screen Page
 --Create Home Page with Drawer
+
+# Day-3 Practice
+--Added fontAwesome package
+--In Screen1(
+    -Added ReadMoreText(),
+)
+
+
+# Day-4 Practice 
+--Create Splash Screen
+--Added SharedPreferences
+--
