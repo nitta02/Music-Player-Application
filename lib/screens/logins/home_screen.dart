@@ -3,8 +3,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/constants/text_style_constant.dart';
+import 'package:flutter_application_1/screens/logins/login_screen.dart';
+import 'package:flutter_application_1/screens/logout_screen.dart';
+import 'package:flutter_application_1/screens/profile_data_screen.dart';
 import 'package:flutter_application_1/widgets/home_body.dart';
-import 'package:badges/badges.dart' as badges;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -20,12 +23,39 @@ class HomeScreen extends StatelessWidget {
           ),
           centerTitle: true,
           actions: [
-            Center(
-              child: Badge(
-                isLabelVisible: true,
-                label: Text('2'),
-                child: Icon(Icons.notifications),
-              ),
+            PopupMenuButton(
+              icon: Icon(CupertinoIcons.profile_circled),
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                    child:
+                        TextButton(onPressed: () {}, child: Text('Profile'))),
+                PopupMenuItem(
+                    child: TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ProfileDataScreen(),
+                              ));
+                        },
+                        child: Text('Profile Data'))),
+
+                //Logout Option---------------------------------------
+                PopupMenuItem(
+                    child: TextButton(
+                        onPressed: () async {
+                          SharedPreferences sp =
+                              await SharedPreferences.getInstance();
+                          sp.clear();
+                          // ignore: use_build_context_synchronously
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LoginScreen(),
+                              ));
+                        },
+                        child: Text('Logout'))),
+              ],
             )
           ],
         ),
@@ -58,7 +88,13 @@ class HomeScreen extends StatelessWidget {
               ListTile(
                 leading: Icon(Icons.logout),
                 title: Text('Logout'),
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => LogOutScreen(),
+                      ));
+                },
               ),
             ],
           ),

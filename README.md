@@ -26,4 +26,9 @@ Start Using ReadME . Do not know fully how to use this File.
 # Day-4 Practice 
 --Create Splash Screen
 --Added SharedPreferences
+
+# Day-5 Practice
+--Added Logout Option
+--Create Logout Page Additionally
+--Added Profile Data Screen
 --
