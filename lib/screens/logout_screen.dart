@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/constants/text_style_constant.dart';
-import 'package:flutter_application_1/screens/logins/login_screen.dart';
+import 'package:flutter_application_1/screens/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LogOutScreen extends StatefulWidget {

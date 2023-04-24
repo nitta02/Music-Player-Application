@@ -1,26 +1,23 @@
-// ignore_for_file: prefer_const_constructors, unused_field
+// ignore_for_file: prefer_const_constructors
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/constants/text_style_constant.dart';
 import 'package:flutter_application_1/screens/home_screen.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SignUpPage extends StatefulWidget {
-  const SignUpPage({super.key});
+class TeacherRoleScreen extends StatefulWidget {
+  const TeacherRoleScreen({super.key});
 
   @override
-  State<SignUpPage> createState() => _SignUpPageState();
+  State<TeacherRoleScreen> createState() => _TeacherRoleScreenState();
 }
 
-class _SignUpPageState extends State<SignUpPage> {
+class _TeacherRoleScreenState extends State<TeacherRoleScreen> {
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
   String _selectedRole = '';
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +33,7 @@ class _SignUpPageState extends State<SignUpPage> {
               height: 80,
             ),
             Text(
-              'Sign Up',
+              'Teacher Role Sign Up',
               style: boldStyle,
             ),
             TextFormField(
@@ -104,6 +101,12 @@ class _SignUpPageState extends State<SignUpPage> {
                 sp.setString('password', passwordController.text.toString());
                 sp.setString('confirmPassowrd',
                     confirmPasswordController.text.toString());
+                // ignore: use_build_context_synchronously
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HomeScreen(),
+                    ));
               },
               child: Text(
                 'Sign Up',
