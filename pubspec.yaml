@@ -40,6 +40,7 @@ dependencies:
   badges: ^3.1.1
   animated_text_kit: ^4.2.2
   shared_preferences: ^2.1.0
+  velocity_x: ^3.6.0
 
 dev_dependencies:
   flutter_test:

@@ -31,4 +31,9 @@ Start Using ReadME . Do not know fully how to use this File.
 --Added Logout Option
 --Create Logout Page Additionally
 --Added Profile Data Screen
+
+
+# Day-6 Practice
+--Create Role Page Select
+--Added Multi Role System for the Teachers & The Students
 --
