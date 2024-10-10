@@ -17,21 +17,31 @@ class _DrawerWidgetState extends State<DrawerWidget> {
       backgroundColor: Theme.of(context).colorScheme.background,
       child: Column(
         children: [
-          ListTile(
-            title: Text('Home'),
+          const DrawerHeader(
+            child: Icon(Icons.music_note),
           ),
-          Row(
-            children: [
-              Text('Theme'),
-              CupertinoSwitch(
-                value:
-                    Provider.of<Themeprovider>(context, listen: false).isDark,
-                onChanged: (value) {
-                  Provider.of<Themeprovider>(context, listen: false).setTheme();
-                },
+          const ListTile(
+            title: Text(
+              'Home',
+              style: TextStyle(
+                fontSize: 16,
               ),
-            ],
-          )
+            ),
+          ),
+          ListTile(
+            title: const Text(
+              'Theme',
+              style: TextStyle(
+                fontSize: 16,
+              ),
+            ),
+            trailing: CupertinoSwitch(
+              value: Provider.of<Themeprovider>(context, listen: false).isDark,
+              onChanged: (value) {
+                Provider.of<Themeprovider>(context, listen: false).setTheme();
+              },
+            ),
+          ),
         ],
       ),
     );

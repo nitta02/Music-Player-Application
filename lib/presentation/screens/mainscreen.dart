@@ -13,9 +13,20 @@ class _MainscreenState extends State<Mainscreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      drawer: const DrawerWidget(),
+      drawer: DrawerWidget(),
       appBar: AppBar(
-        title: const Text('Playlist'),
+        title: Text('Playlist'),
+      ),
+      body: Container(
+        color: Theme.of(context).colorScheme.background,
+        child: ListView.builder(
+          itemBuilder: (context, index) {
+            return ListTile(
+              onTap: () {},
+              title: Text('Song'),
+            );
+          },
+        ),
       ),
     );
   }
