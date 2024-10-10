@@ -25,9 +25,14 @@ class _MainscreenState extends State<Mainscreen> {
         return ListView.builder(
           itemCount: songs.length,
           itemBuilder: (context, index) {
-            return ListTile(
-              onTap: () {},
-              title: Text(songs[index].songName),
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListTile(
+                onTap: () {},
+                leading: Image.asset(songs[index].imagePath),
+                title: Text(songs[index].songName),
+                subtitle: Text(songs[index].artistName),
+              ),
             );
           },
         );
