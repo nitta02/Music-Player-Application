@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/core/model/songModel.dart';
+import 'package:flutter_application_1/core/provider/songProvider.dart';
 import 'package:flutter_application_1/presentation/widgets/drawer.dart';
+import 'package:provider/provider.dart';
 
 class Mainscreen extends StatefulWidget {
   const Mainscreen({super.key});
@@ -17,17 +20,18 @@ class _MainscreenState extends State<Mainscreen> {
       appBar: AppBar(
         title: Text('Playlist'),
       ),
-      body: Container(
-        color: Theme.of(context).colorScheme.background,
-        child: ListView.builder(
+      body: Consumer<Songprovider>(builder: (context, value, child) {
+        List<Songmodel> songs = value.songList;
+        return ListView.builder(
+          itemCount: songs.length,
           itemBuilder: (context, index) {
             return ListTile(
               onTap: () {},
-              title: Text('Song'),
+              title: Text(songs[index].songName),
             );
           },
-        ),
-      ),
+        );
+      }),
     );
   }
 }

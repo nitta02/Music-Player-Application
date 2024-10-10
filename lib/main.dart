@@ -1,13 +1,21 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/core/provider/songProvider.dart';
 import 'package:flutter_application_1/core/provider/themeProvider.dart';
 import 'package:flutter_application_1/presentation/screens/mainscreen.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(ChangeNotifierProvider(
-    create: (context) => Themeprovider(),
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+        create: (context) => Themeprovider(),
+      ),
+      ChangeNotifierProvider(
+        create: (context) => Songprovider(),
+      ),
+    ],
     child: const MyApp(),
   ));
 }
