@@ -173,20 +173,28 @@ class Musicscreen extends StatelessWidget {
                                   width: 15,
                                 ),
                                 Expanded(
-                                    flex: 2,
-                                    child: Boxshape(
-                                      child: Center(
-                                        child: value.isPlaying &&
-                                                value.currentSong ==
-                                                    value.songList[0].audioPath
-                                            ? const Icon(Icons.pause)
-                                            : const Icon(Icons.play_arrow),
-                                      ),
-                                      onTap: () async {
-                                        await value
-                                            .play(value.songList[0].audioPath);
-                                      },
-                                    )),
+                                  flex: 2,
+                                  child: GestureDetector(
+                                    onTap: () async {
+                                      value.isLoading
+                                          ? CircularProgressIndicator() // Show loading spinner
+                                          : IconButton(
+                                              icon: value.isPlaying
+                                                  ? Icon(Icons.pause)
+                                                  : Icon(Icons.play_arrow),
+                                              onPressed: () =>
+                                                  value.togglePlayPause(value
+                                                      .songList[0].audioPath),
+                                            );
+                                    },
+                                    child: Icon(
+                                      value.isPlaying
+                                          ? Icons.pause
+                                          : Icons
+                                              .play_arrow, // Toggle between play and pause icon
+                                    ),
+                                  ),
+                                ),
                                 const SizedBox(
                                   width: 15,
                                 ),
