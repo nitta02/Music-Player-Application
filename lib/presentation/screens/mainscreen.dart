@@ -1,6 +1,9 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/model/songModel.dart';
 import 'package:flutter_application_1/core/provider/songProvider.dart';
+import 'package:flutter_application_1/presentation/screens/musicScreen.dart';
 import 'package:flutter_application_1/presentation/widgets/drawer.dart';
 import 'package:provider/provider.dart';
 
@@ -16,9 +19,9 @@ class _MainscreenState extends State<Mainscreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      drawer: DrawerWidget(),
+      drawer: const DrawerWidget(),
       appBar: AppBar(
-        title: Text('Playlist'),
+        title: const Text('Playlist'),
       ),
       body: Consumer<Songprovider>(builder: (context, value, child) {
         List<Songmodel> songs = value.songList;
@@ -28,7 +31,15 @@ class _MainscreenState extends State<Mainscreen> {
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: ListTile(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Musicscreen(
+                            imagePath: songs[index].imagePath,
+                            name: songs[index].songName),
+                      ));
+                },
                 leading: Image.asset(songs[index].imagePath),
                 title: Text(songs[index].songName),
                 subtitle: Text(songs[index].artistName),
