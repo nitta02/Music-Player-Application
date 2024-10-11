@@ -1,6 +1,6 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/model/songModel.dart';
-import 'package:just_audio/just_audio.dart';
 
 class Songprovider extends ChangeNotifier {
   List<Songmodel> songList = [
@@ -25,6 +25,38 @@ class Songprovider extends ChangeNotifier {
   String? get currentSong => _currentSong;
   bool get isPlaying => _isPlaying;
 
+  Duration _currentDuration = Duration.zero;
+  Duration _totalDuration = Duration.zero;
+
+  Songprovider() {
+    listentoDuration();
+  }
+
+  void listentoDuration() {
+    // Listener for total duration
+    audioPlayer.onDurationChanged.listen(
+      (event) {
+        print("Total Duration: $event"); // Debug output
+        _totalDuration = event;
+        notifyListeners();
+      },
+    );
+
+    // Listener for current position
+    audioPlayer.onPositionChanged.listen(
+      (onPosition) {
+        print("Current Position: $onPosition"); // Debug output
+        _currentDuration = onPosition; // Assign to the correct variable
+        notifyListeners();
+      },
+    );
+
+    // Listener for complete position
+    audioPlayer.onPlayerComplete.listen(
+      (onComplete) {},
+    );
+  }
+
   Future<void> play(String assetSong) async {
     if (_currentSong == assetSong) {
       // If the same song is clicked, toggle between play/pause
@@ -35,15 +67,15 @@ class Songprovider extends ChangeNotifier {
       } else {
         _isPlaying = true; // Immediately update state to reflect play
         notifyListeners(); // Notify UI to update the button icon
-        await audioPlayer.play(); // Then call async play
+        await audioPlayer.resume(); // Use resume if the player is paused
       }
     } else {
       // If a new song is selected, play the new song
       _currentSong = assetSong;
       _isPlaying = true; // Immediately update state to reflect play
       notifyListeners(); // Notify UI to update the button icon
-      await audioPlayer.setAsset(assetSong);
-      await audioPlayer.play();
+      await audioPlayer.setSourceAsset(assetSong); // Set the source first
+      await audioPlayer.resume(); // Use resume to play
     }
   }
 
@@ -53,48 +85,35 @@ class Songprovider extends ChangeNotifier {
   }
 
   Future<void> nextSong() async {
-    // Loop through the song list to find the current song
     for (int i = 0; i < songList.length; i++) {
       if (_currentSong == songList[i].audioPath) {
-        // Check if the current song is the last in the list
         if (i == songList.length - 1) {
-          // If it's the last song, set the next song to the first one
           _currentSong = songList[0].audioPath;
         } else {
-          // Otherwise, move to the next song
           _currentSong = songList[i + 1].audioPath;
         }
         _isPlaying = true;
         notifyListeners();
-        await audioPlayer.setAsset(currentSong!);
-        await audioPlayer.play();
-        break; // Stop the loop once we find and play the next song
+        await audioPlayer.setSourceAsset(_currentSong!);
+        await audioPlayer.resume();
+        break;
       }
     }
   }
 
   Future<void> previousSong() async {
-    // Loop through the song list to find the current song
     for (int i = 0; i < songList.length; i++) {
       if (_currentSong == songList[i].audioPath) {
-        // Check if the current song is the first in the list
         if (i == 0) {
-          // If it's the first song, set the previous song to the last one
           _currentSong = songList[songList.length - 1].audioPath;
         } else {
-          // Otherwise, move to the previous song
           _currentSong = songList[i - 1].audioPath;
         }
-
-        // Set the song as playing and update the listeners
         _isPlaying = true;
         notifyListeners();
-
-        // Set the audio and play the previous song
-        await audioPlayer.setAsset(_currentSong!);
-        await audioPlayer.play();
-
-        break; // Stop the loop once we find and play the previous song
+        await audioPlayer.setSourceAsset(_currentSong!);
+        await audioPlayer.resume();
+        break;
       }
     }
   }
@@ -103,5 +122,36 @@ class Songprovider extends ChangeNotifier {
   void dispose() {
     audioPlayer.dispose();
     super.dispose();
+  }
+
+  void pauseSong() async {
+    await audioPlayer.pause();
+    _isPlaying = false;
+    notifyListeners();
+  }
+
+  void resumeSong() async {
+    await audioPlayer.resume();
+    _isPlaying = true;
+    notifyListeners();
+  }
+
+  void pauseOrresume() async {
+    if (_isPlaying) {
+      pauseSong();
+    } else {
+      resumeSong();
+    }
+    notifyListeners();
+  }
+
+  void playNextSong() async {}
+
+  void playpreviousSong() async {}
+
+  //seek the song position
+
+  void seekPosition(Duration duration) async {
+    await audioPlayer.seek(duration);
   }
 }

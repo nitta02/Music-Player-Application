@@ -73,14 +73,14 @@ class Musicscreen extends StatelessWidget {
                           boxShadow: [
                             BoxShadow(
                                 offset: const Offset(2, 2),
-                                blurRadius: 5,
+                                blurRadius: 1,
                                 color:
                                     Provider.of<Themeprovider>(context).isDark
                                         ? Colors.grey.shade700
                                         : Colors.grey.shade500),
                             BoxShadow(
                                 offset: const Offset(-2, -2),
-                                blurRadius: 5,
+                                blurRadius: 1,
                                 color:
                                     Provider.of<Themeprovider>(context).isDark
                                         ? Colors.grey.shade700
