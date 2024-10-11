@@ -28,6 +28,7 @@ class _MainscreenState extends State<Mainscreen> {
         return ListView.builder(
           itemCount: songs.length,
           itemBuilder: (context, index) {
+            var songsIndex = songs[index];
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: ListTile(
@@ -36,8 +37,9 @@ class _MainscreenState extends State<Mainscreen> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => Musicscreen(
-                            imagePath: songs[index].imagePath,
-                            name: songs[index].songName),
+                            artistname: songsIndex.artistName,
+                            imagePath: songsIndex.imagePath,
+                            name: songsIndex.songName),
                       ));
                 },
                 leading: Image.asset(songs[index].imagePath),
