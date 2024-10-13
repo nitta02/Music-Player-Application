@@ -1,9 +1,11 @@
+// ignore_for_file: avoid_print
+
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/model/songModel.dart';
-import 'package:just_audio/just_audio.dart';
 
-class Songprovider extends ChangeNotifier {
-  List<Songmodel> songList = [
+class SongProvider extends ChangeNotifier {
+  final List<Songmodel> _songList = [
     Songmodel(
       imagePath: 'lib/assets/images/moner jore.png',
       audioPath: 'lib/assets/audio/moner jore.mp3',
@@ -12,90 +14,132 @@ class Songprovider extends ChangeNotifier {
     ),
     Songmodel(
       imagePath: 'lib/assets/images/moner jore.png',
-      audioPath: 'lib/assets/audio/moner jore.mp3',
+      audioPath: 'lib/assets/audio/moner jore copy.mp3',
       songName: 'Moner Jore 2',
       artistName: 'Habib',
     ),
   ];
 
-  final AudioPlayer audioPlayer = AudioPlayer();
-  String? _currentSong; // Store the current song's audio path
-  bool _isPlaying = false;
-  bool _isLoading = false; // To show loading state
+  int? _currentSongIndex;
 
-  String? get currentSong => _currentSong;
-  bool get isPlaying => _isPlaying;
-  bool get isLoading => _isLoading; // Getter for loading state
+  // Getter--------------------------------------
+  List<Songmodel> get songList => _songList;
+  int? get currentSongIndex => _currentSongIndex;
 
-  // Method to load and play the song
-  Future<void> loadAndPlay(String assetSong) async {
-    _isLoading = true; // Show loading state
+  // Setter --------------------------------
+  set currentSongIndex(int? newIndex) {
+    _currentSongIndex = newIndex;
+    if (newIndex != null) {
+      playSong();
+    }
     notifyListeners();
-
-    try {
-      await audioPlayer.setAsset(assetSong); // Preload the asset
-      _currentSong = assetSong; // Set the current song
-      await play(); // Play the preloaded song
-    } catch (e) {
-      print("Error loading song: $e");
-    } finally {
-      _isLoading = false; // Remove loading state
-      notifyListeners();
-    }
   }
 
-  // Play the song if loaded
-  Future<void> play() async {
-    if (_currentSong != null) {
-      await audioPlayer.play();
-      _isPlaying = true;
-      notifyListeners();
-    }
+  // Audio Player
+  final AudioPlayer _audioPlayer = AudioPlayer();
+
+  // Duration
+  Duration _currentDuration = Duration.zero;
+  Duration _totalDuration = Duration.zero;
+
+  // Playing or Not
+  bool _isPlaying = false;
+
+  bool get isPlaying => _isPlaying;
+  Duration get currentDuration => _currentDuration;
+  Duration get totalDuration => _totalDuration;
+
+  SongProvider() {
+    listenDuration();
   }
 
-  // Pause the song
-  Future<void> pause() async {
-    await audioPlayer.pause();
+  void listenDuration() {
+    _audioPlayer.onDurationChanged.listen((duration) {
+      _totalDuration = duration;
+      notifyListeners();
+    });
+
+    _audioPlayer.onPositionChanged.listen((position) {
+      _currentDuration = position;
+      notifyListeners();
+    });
+
+    _audioPlayer.onPlayerComplete.listen((_) {
+      nextSong();
+    });
+  }
+
+  // Play
+  void playSong() async {
+    if (currentSongIndex == null) {
+      print('No song is selected to play.');
+      return; // Exit the function if no song is selected
+    }
+
+    final String path = songList[currentSongIndex!].audioPath;
+    print('Playing song: $path'); // Debugging log
+    await _audioPlayer.stop();
+    await _audioPlayer.play(AssetSource(path));
+    _isPlaying = true;
+    notifyListeners();
+  }
+
+  // Pause
+  void pauseSong() async {
+    await _audioPlayer.pause();
     _isPlaying = false;
     notifyListeners();
   }
 
-  // Handle play/pause toggle
-  Future<void> togglePlayPause(String assetSong) async {
-    if (_currentSong == assetSong && _isPlaying) {
-      await pause();
-    } else if (_currentSong == assetSong && !_isPlaying) {
-      await play();
+  // Resume
+  void resumeSong() async {
+    await _audioPlayer.resume();
+    _isPlaying = true;
+    notifyListeners();
+  }
+
+  // Pause or Resume
+  void pauseOrResume() async {
+    if (_isPlaying) {
+      pauseSong();
     } else {
-      await loadAndPlay(assetSong); // Load and play the new song
+      resumeSong();
+    }
+    notifyListeners();
+  }
+
+  // Play Next song
+  void nextSong() {
+    if (_currentSongIndex != null) {
+      if (_currentSongIndex! < _songList.length - 1) {
+        _currentSongIndex = _currentSongIndex! + 1;
+      } else {
+        _currentSongIndex = 0; // Loop back to the first song
+      }
+      playSong(); // Play the next song
     }
   }
 
-  // Play the next song
-  Future<void> nextSong() async {
-    int currentIndex =
-        songList.indexWhere((song) => song.audioPath == _currentSong);
-    if (currentIndex == -1) return;
+  // Play Previous song
+  void previousSong() async {
+    if (currentSongIndex == null || currentSongIndex! <= 0) {
+      print('No previous song available.');
+      return; // Exit if no previous song exists
+    }
 
-    // Move to the next song
-    currentIndex = (currentIndex + 1) % songList.length;
-    await loadAndPlay(songList[currentIndex].audioPath!); // Load next song
+    // Decrement the current index to go to the previous song
+    currentSongIndex = currentSongIndex! - 1;
+
+    final String path = songList[currentSongIndex!].audioPath;
+    print('Playing previous song: $path'); // Debugging log
+    await _audioPlayer.stop();
+    await _audioPlayer.play(AssetSource(path));
+    _isPlaying = true;
+    notifyListeners();
   }
 
-  // Play the previous song
-  Future<void> previousSong() async {
-    int currentIndex =
-        songList.indexWhere((song) => song.audioPath == _currentSong);
-    if (currentIndex == -1) return;
-
-    // Move to the previous song
-    currentIndex = (currentIndex - 1 + songList.length) % songList.length;
-    await loadAndPlay(songList[currentIndex].audioPath!); // Load previous song
-  }
-
-  @override
-  void dispose() {
-    audioPlayer.dispose();
-    super.dispose();
+  // Seek a song running position
+  void seek(Duration position) async {
+    await _audioPlayer.seek(position);
   }
 }

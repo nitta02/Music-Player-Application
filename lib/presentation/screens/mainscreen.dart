@@ -23,28 +23,35 @@ class _MainscreenState extends State<Mainscreen> {
       appBar: AppBar(
         title: const Text('Playlist'),
       ),
-      body: Consumer<Songprovider>(builder: (context, value, child) {
-        List<Songmodel> songs = value.songList;
+      body: Consumer<SongProvider>(builder: (context, provider, child) {
+        List<Songmodel> songs = provider.songList;
+
+        if (songs.isEmpty) {
+          return const Center(child: Text("No songs available"));
+        }
+
         return ListView.builder(
           itemCount: songs.length,
           itemBuilder: (context, index) {
-            var songsIndex = songs[index];
+            final song = songs[index];
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: ListTile(
                 onTap: () {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Musicscreen(
-                            artistname: songsIndex.artistName,
-                            imagePath: songsIndex.imagePath,
-                            name: songsIndex.songName),
-                      ));
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MusicScreen(
+                        artistName: song.artistName,
+                        imagePath: song.imagePath,
+                        name: song.songName,
+                      ),
+                    ),
+                  );
                 },
-                leading: Image.asset(songs[index].imagePath),
-                title: Text(songs[index].songName),
-                subtitle: Text(songs[index].artistName),
+                leading: Image.asset(song.imagePath),
+                title: Text(song.songName),
+                subtitle: Text(song.artistName),
               ),
             );
           },

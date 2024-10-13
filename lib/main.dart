@@ -13,7 +13,7 @@ void main() {
         create: (context) => Themeprovider(),
       ),
       ChangeNotifierProvider(
-        create: (context) => Songprovider(),
+        create: (context) => SongProvider(),
       ),
     ],
     child: const MyApp(),
